@@ -28,7 +28,8 @@ defmodule Config.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:tomlex, git: "https://github.com/zamith/tomlex", commit: "3021ac8"}
+      {:tomlex, git: "https://github.com/zamith/tomlex", commit: "3021ac8"},
+      {:my_agent, path: "../my_agent"}
     ]
   end
 end
