@@ -1,5 +1,7 @@
 defmodule Config do
 
+  Module.register_attribute __MODULE__, :agent, persist: true
+
   @agent Application.get_env(:config, :agent_impl)
   @name __MODULE__
 
