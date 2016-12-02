@@ -1,6 +1,6 @@
 defmodule Config do
 
-  @agent Agent
+  @agent Application.get_env(:config, :agent_impl)
   @name __MODULE__
 
   def start(file) do
