@@ -137,3 +137,18 @@ To recap, here's what we did above:
     iex(node1@x4.local)2> flush
     "message to :sh"
     ```
+
+
+## Further reading
+
+-   [Elixir Getting Started: Processes](http://elixir-lang.org/getting-started/processes.html)
+
+-   [Erlang Reference Manual: Processes](http://erlang.org/doc/reference_manual/processes.html)
+
+    Most (if not all) Erlang documentation holds in the world of Elixir.
+    However, reading it requires some more effort, as the examples are in Erlang.
+    The Rosetta Stone for deciphering Erlang documentation
+    is [Erlang/Elixir Syntax: A Crash Course](http://elixir-lang.org/crash-course.html).
+    For the part about processes, however, the really useful piece of
+    information is that all the Erlang BIFs for `spawn`ing, `register`ing, `link`ing,
+    etc. are in the `Process` Elixir module.
