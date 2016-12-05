@@ -20,3 +20,8 @@
 ## Training grounds / coding exercises
 
 - [Codewars](https://www.codewars.com)
+
+
+## Contact
+
+Radek Szymczyszyn < radoslaw.szymczyszyn ~at~ erlang.solutions ~dot~ com >
