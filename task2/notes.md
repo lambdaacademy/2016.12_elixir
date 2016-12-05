@@ -190,3 +190,9 @@ Approach it step by step - make _get config option_ work first
 and then go to _set config option_.
 The solution will be about 20 lines of code,
 depending on your preferred formatting.
+
+
+## Further reading
+
+- [Elixir Getting Started: Agent](http://elixir-lang.org/getting-started/mix-otp/agent.html)
+- [Elixir Getting Started: GenServer](http://elixir-lang.org/getting-started/mix-otp/genserver.html)
