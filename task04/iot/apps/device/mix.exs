@@ -36,6 +36,6 @@ defmodule Device.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:dnssd, github: "benoitc/dnssd_erlang"}]
   end
 end
