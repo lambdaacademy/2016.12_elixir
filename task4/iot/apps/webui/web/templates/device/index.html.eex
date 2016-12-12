@@ -1,0 +1,5 @@
+<ul class="devices">
+  <%= for d <- devices do %>
+    <li><%= "#{d.name} aka #{d.domain}: #{d.data}" %></li>
+  <% end %>
+</ul>
