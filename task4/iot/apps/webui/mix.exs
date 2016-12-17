@@ -21,7 +21,7 @@ defmodule Webui.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Webui, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :device]]
   end
 
   # Specifies which paths to compile per environment.
