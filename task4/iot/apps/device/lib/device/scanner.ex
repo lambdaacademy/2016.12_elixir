@@ -12,7 +12,9 @@ defmodule Device.Scanner do
   end
 
   def handle_info(msg, state) do
-    {:dnssd, reference, {_, change,{name, type , domain}}} = msg
+    {:dnssd, _, {_, change,{name, type , domain}}} = msg
+    device_id = {name, domain}
+
     case change do
       :add ->
         {:ok, {_, port, _}} = :dnssd.resolve_sync name, type , domain
@@ -22,9 +24,9 @@ defmodule Device.Scanner do
                   domain: domain,
                   data: "port=#{port}"
                 }
-        Device.Registry.add({reference, device})
+        Device.Registry.add({device_id, device})
 
-      :remove -> Device.Registry.remove(reference)
+      :remove -> Device.Registry.remove(device_id)
     end
     {:noreply, state}
   end
