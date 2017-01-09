@@ -17,7 +17,7 @@ DNS queries. [...]
 Each service instance is described using a DNS SRV and DNS TXT (RFC 1035) record.
 A client discovers the list of available instances for a given service type
 by querying the DNS PTR (RFC 1035) record of that service type's name;
-the server returns zero or more names of the form "<Service>.<Domain>",
+the server returns zero or more names of the form `<service>.<domain>`,
 each corresponding to a SRV/TXT record pair.
 The SRV record resolves to the domain name providing the instance,
 while the TXT can contain service-specific configuration parameter.
@@ -76,7 +76,8 @@ mix deps.get
 
 Before we proceed let's make sure we don't run into naming conflicts
 if multiple Raspberries are present in the network.
-Due to Nerves limitations this can't be done automatically - yet? Hopefully.
+Due to Nerves limitations this can't be done automatically.
+Yet? Hopefully.
 This diff shows the two places where we need to place our device's desired
 hostname - make sure each one of you in the group has a unique value there:
 
@@ -236,7 +237,7 @@ As the name suggests, `dbg` is the standard Erlang VM debugger.
 It's not a stepwise debugger like `gdb` or debuggers built into IDEs.
 It's a _tracing debugger_, convenient for getting execution traces of
 highly concurrent systems, where stopping the program is not an option
-due to a cascade of timeouts what would occur.
+due to a cascade of timeouts that would occur.
 
 
 ### Networking
