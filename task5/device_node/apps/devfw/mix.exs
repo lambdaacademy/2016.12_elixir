@@ -26,7 +26,8 @@ defmodule DevFW.Mixfile do
   def application do
     [mod: {DevFW, []},
      applications: [:logger,
-                    :nerves_networking]]
+                    :nerves_networking,
+                    :devui]]
   end
 
   def deps do
