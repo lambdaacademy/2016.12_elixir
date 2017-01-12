@@ -5,18 +5,19 @@ defmodule DevFW.Net do
   alias Nerves.Networking
 
   @hostname Application.get_env(:devfw, :hostname)
+  @phoenix_port Application.get_env(:devui, DevUI.Endpoint)[:http][:port]
 
   def setup(iface) do
     # Don't start networking unless we're on nerves
     unless :os.type == {:unix, :darwin} do
       {:ok, _} = Networking.setup iface, hostname: @hostname
       Logger.debug("network settings: #{inspect Networking.settings(iface)}")
-      publish_node_via_mdns(iface)
+      publish_node_via_mdns(iface, @phoenix_port)
     end
     {:ok, self}
   end
 
-  def publish_node_via_mdns(interface) do
+  def publish_node_via_mdns(interface, phoenix_port) do
     Logger.debug("publishing via MDNS")
     iface = Networking.settings(interface)
     hostname = iface.hostname
@@ -57,7 +58,7 @@ defmodule DevFW.Net do
       #})
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "#{hostname}._http._tcp.local",
-      data: ["txtvers=1", "port=4000"],
+      data: ["txtvers=1", "port=#{phoenix_port}"],
       ttl: 10,
       type: :txt
     })
