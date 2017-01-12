@@ -14,7 +14,6 @@ use Mix.Config
 config :devfw, hostname: "rpi7"
 
 config :devui, DevUI.Endpoint,
-  http: [port: 80],
   url: [host: "localhost", port: 80],
   secret_key_base: "#############################",
   root: Path.dirname(__DIR__),
