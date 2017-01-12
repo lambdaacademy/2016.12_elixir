@@ -27,11 +27,13 @@ defmodule DevFW.Mixfile do
     [mod: {DevFW, []},
      applications: [:logger,
                     :nerves_networking,
+                    :mdns,
                     :devui]]
   end
 
   def deps do
     [{:nerves, "~> 0.4.0"},
+     {:mdns, github: "erszcz/mdns"},
      {:devui, in_umbrella: true},
      {:nerves_networking, github: "nerves-project/nerves_networking"}]
   end

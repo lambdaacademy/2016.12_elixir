@@ -11,6 +11,8 @@ use Mix.Config
 
 # import_config "#{Mix.Project.config[:target]}.exs"
 
+config :devfw, hostname: "rpi7"
+
 config :devui, DevUI.Endpoint,
   http: [port: 80],
   url: [host: "localhost", port: 80],
