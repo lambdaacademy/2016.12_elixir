@@ -4,6 +4,9 @@ defmodule DevFW.Net do
 
   alias Nerves.Networking
 
+  # epmd_port is not configured here, as we have no way of doing that.
+  # We just want to refer to the default value by name.
+  @epmd_port 4369
   @hostname Application.get_env(:devfw, :hostname)
   @phoenix_port Application.get_env(:devui, DevUI.Endpoint)[:http][:port]
 
@@ -12,12 +15,13 @@ defmodule DevFW.Net do
     unless :os.type == {:unix, :darwin} do
       {:ok, _} = Networking.setup iface, hostname: @hostname
       Logger.debug("network settings: #{inspect Networking.settings(iface)}")
-      publish_node_via_mdns(iface, @phoenix_port)
+      publish_node_via_mdns(iface, %{epmd: @epmd_port,
+                                     phoenix: @phoenix_port})
     end
     {:ok, self}
   end
 
-  def publish_node_via_mdns(interface, phoenix_port) do
+  def publish_node_via_mdns(interface, ports) do
     Logger.debug("publishing via MDNS")
     iface = Networking.settings(interface)
     hostname = iface.hostname
@@ -40,8 +44,20 @@ defmodule DevFW.Net do
       type: :ptr
     })
     Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "_services._dns-sd._udp.local",
+      data: "_epmd._tcp.local",
+      ttl: 10,
+      type: :ptr
+    })
+    Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "_http._tcp.local",
       data: "#{hostname}._http._tcp.local",
+      ttl: 10,
+      type: :ptr
+    })
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "_epmd._tcp.local",
+      data: "#{hostname}._epmd._tcp.local",
       ttl: 10,
       type: :ptr
     })
@@ -58,7 +74,13 @@ defmodule DevFW.Net do
       #})
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "#{hostname}._http._tcp.local",
-      data: ["txtvers=1", "port=#{phoenix_port}"],
+      data: ["txtvers=1", "port=#{ports[:phoenix]}"],
+      ttl: 10,
+      type: :txt
+    })
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "#{hostname}._epmd._tcp.local",
+      data: ["txtvers=1", "port=#{ports[:epmd]}"],
       ttl: 10,
       type: :txt
     })
