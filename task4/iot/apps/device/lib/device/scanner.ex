@@ -1,4 +1,5 @@
 defmodule Device.Scanner do
+  require Logger
   use GenServer
 
   def start_link(options \\ []) do
@@ -12,21 +13,26 @@ defmodule Device.Scanner do
   end
 
   def handle_info(msg, state) do
-    {:dnssd, _, {_, change,{name, type , domain}}} = msg
+    Logger.info("in: #{inspect msg}")
+    {:dnssd, _, {_, change, {name, type, domain}}} = msg
     device_id = {name, domain}
 
     case change do
       :add ->
-        {:ok, {_, port, _}} = :dnssd.resolve_sync name, type , domain
-
-        device = %Device{
-                  name: name,
-                  domain: domain,
-                  data: "port=#{port}"
-                }
-        Device.Registry.add({device_id, device})
-
-      :remove -> Device.Registry.remove(device_id)
+        case :dnssd.resolve_sync(name, type, domain) do
+          {:ok, {_, port, _}} ->
+            device = %Device{
+              name: name,
+              domain: domain,
+              data: "port=#{port}"
+            }
+            Device.Registry.add({device_id, device})
+          {:error, :timeout} ->
+            Logger.info("resolve_sync timeout")
+            :ok
+        end
+      :remove ->
+        Device.Registry.remove(device_id)
     end
     {:noreply, state}
   end
