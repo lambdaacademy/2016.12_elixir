@@ -1,5 +1,8 @@
 defmodule Device do
 
-  defstruct [:name, :domain, :data]
+  defstruct [:name,
+             :type,
+             :domain,
+             :port]
 
 end

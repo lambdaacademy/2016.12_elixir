@@ -1,5 +1,7 @@
+<h2>Nearby devices</h2>
+
 <ul class="devices">
   <%= for d <- devices do %>
-    <li><%= "#{d.name} aka #{d.domain}: #{d.data}" %></li>
+    <li><%= device(d) %></li>
   <% end %>
 </ul>
