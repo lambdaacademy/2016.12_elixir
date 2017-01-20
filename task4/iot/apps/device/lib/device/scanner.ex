@@ -14,23 +14,28 @@ defmodule Device.Scanner do
     {:ok, %{{@services, "PTR"} => ref}}
   end
 
-  def handle_info({:dnssd, ref, {:query_record, change, {domain, rtype, _, rdata} = params}}, state) do
-    next = case {domain, domain in @service_types, rtype} do
-      {@services, _, _} ->
-        { [{:stop_query, {domain, rtype}}],
-          [{:subquery, get_domain(params), "PTR"}] }
-      {_, true, _} ->
-        { [{:stop_query, {domain, rtype}}],
-          [{:subquery, get_domain(params), "TXT"}] }
-      {_, false, "TXT"} ->
-        { [{:remove_device, domain}],
-          [{:add_device, domain, parse_txt_data(rdata)}] }
-      {_, _, _} ->
-        { [], [] }
+  def handle_info({:dnssd, ref, {:query_record, change, {domain, rtype, _, rdata} = params}} = m, state) do
+    try do
+      next = case {domain, domain in @service_types, rtype} do
+        {@services, _, _} ->
+          { [{:stop_query, {domain, rtype}}],
+            [{:subquery, get_domain(params), "PTR"}] }
+        {_, true, _} ->
+          { [{:stop_query, {domain, rtype}}],
+            [{:subquery, get_domain(params), "TXT"}] }
+        {_, false, "TXT"} ->
+          { [{:remove_device, domain}],
+            [{:add_device, domain, parse_txt_data(rdata)}] }
+        {_, _, _} ->
+          { [], [] }
+      end
+      new_state = go(add_or_remove?(change, next), state)
+      Logger.debug("new state: #{inspect(new_state)}")
+      {:noreply, new_state}
+    catch _, r ->
+      Logger.error("error #{inspect(r)} on #{inspect(m)}")
+      {:noreply, state}
     end
-    new_state = go(add_or_remove?(change, next), state)
-    Logger.debug("new state: #{inspect(new_state)}")
-    {:noreply, new_state}
   end
 
   def handle_info(msg, state) do
