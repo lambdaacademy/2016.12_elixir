@@ -2,8 +2,9 @@ defmodule Device.Scanner do
   require Logger
   use GenServer
 
-  @services      "_services._dns-sd._udp.local."
-  @service_types ["_epmd._tcp.local.", "_http._tcp.local."]
+  @services      "_services._dns-sd._udp.local"
+  @service_types ["_epmd._tcp.local.", "_http._tcp.local.",
+                  "_epmd._tcp.local", "_http._tcp.local"]
 
   def start_link(options \\ []) do
     GenServer.start_link(__MODULE__, :ok, [options])
@@ -17,7 +18,7 @@ defmodule Device.Scanner do
   def handle_info({:dnssd, ref, {:query_record, change, {domain, rtype, _, rdata} = params}} = m, state) do
     try do
       next = case {domain, domain in @service_types, rtype} do
-        {@services, _, _} ->
+        {@services <> dot, _, _} when dot == "." or dot == "" ->
           { [{:stop_query, {domain, rtype}}],
             [{:subquery, get_domain(params), "PTR"}] }
         {_, true, _} ->
