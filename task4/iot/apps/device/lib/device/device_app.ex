@@ -7,7 +7,7 @@ defmodule Device.App do
     import Supervisor.Spec, warn: false
     # Define workers and child supervisors to be supervised
     children = [
-        worker(Device.Registry, [name: Device.Registry]), 
+        worker(Device.Registry, []),
         worker(Device.Scanner, [name: Device.Scanner])
     ]
 
