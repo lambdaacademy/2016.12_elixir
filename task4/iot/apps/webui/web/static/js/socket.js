@@ -57,7 +57,11 @@ socket.connect()
 let channel = socket.channel("device:__index__", {})
 let deviceContainer = document.querySelector("#devices")
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("ok", resp => {
+      console.log("Joined successfully", resp)
+      // TODO: remove all deviceContainer children
+      // see removeAll example at https://developer.mozilla.org/en-US/docs/Web/API/Node
+  })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 channel.on("add_device", payload => {
